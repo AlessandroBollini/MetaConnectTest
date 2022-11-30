@@ -7,17 +7,30 @@
 <script>
 /* To connect using MetaMask */
 async function connect() {
-  if (window.ethereum) {
+   const isMobile=navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/);
+   if(isMobile!=null){
+      await mobileConnect();
+   }else{
+      await desktopConnect();
+   }
+}
+
+async function desktopConnect(){
+   if (window.ethereum) {
      await window.ethereum.request({ method: "eth_requestAccounts" });
      window.web3 = new Web3(window.ethereum);
      const account = web3.eth.accounts;
-     //Get the current MetaMask selected/active wallet
      const walletAddress = account.givenProvider.selectedAddress;
      console.log(`Wallet: ${walletAddress}`);
   
   } else {
    console.log("No wallet");
   }
+}
+
+async function mobileConnect(){
+   console.log("It's mobile");
+   window.open("https://metamask.app.link/dapp/metatest.herokuapp.com/");
 }
 </script>
 <input type="button" value="Connect Wallet" onclick="connect();">
